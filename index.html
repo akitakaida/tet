@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GAME</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="game-wrapper">
+        <div class="container">
+            <table id="gameArea">
+                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+            </table>
+            <input type="button" class="btn" value="←" onclick="left()">
+            <input type="button" class="btn" value="↓" onclick="down()">
+            <input type="button" class="btn" value="→" onclick="right()">
+            <input type="button" class="btn" value="↑：回転" onclick="spin()">
+            <input type="button" class="btn" value="Start" onclick="start()">
+        </div>        
+    </div>
+    <div class="score-wrapper">
+        <div class="container">
+            <p id="level">LEVEL 1</p>
+            <p id="score">SCORE 0</p>
+            <p id="hi_score">Hi SCORE 0</p>
+        </div>
+    </div>
+    
+    <script src="js/script.js"></script>
+</body>
+
+</html>
