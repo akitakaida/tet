@@ -65,7 +65,7 @@ const minos = [ //4ｘ4でミノの形と数字を規定
 ]
 let gameMode = 3;
 let area = gameArea;
-let delieted_lines = 0;
+let del_lines = 0;
 let level = 1;
 let score = 0;
 let hiScore = 0;
@@ -78,14 +78,15 @@ function modeChange() {//ゲームモードの指定
                     area[i][j] = 0;
                 }
             }
-            delieted_lines = 0; //reset
+            del_lines = 0; //reset
             level = 1;
             score = 0;
             mSec = 1000;
             gameMode = 1;
             changeLevel();
-            changeScore();
+            changeScore(2);
             modeChange();
+            changeColor();
             break;
         case 1: //minoを動かす
             createMino()
@@ -123,10 +124,10 @@ function start() { //gameStart
     modeChange();
 }
 function changeLevel(){ //LEVELを変えて書き換え
-    if(delieted_lines > (level - 2) * level + 4){ //5, 8, 13, 20 ...でレベルアップ
+    if(del_lines > (level - 2) * level + 4){ //5, 8, 13, 20 ...でレベルアップ
         level++;
         changeLevel();
-    }else if (delieted_lines > 1) { //2列消すとLEVEL2
+    }else if (del_lines > 1 && del_lines < 5) { //2列消すとLEVEL2
         level = 2;
         changeLevel;
     }
@@ -139,7 +140,7 @@ function changeLevel(){ //LEVELを変えて書き換え
     }
 }
 function changeScore(n) { //scoreを変えて書き換え
-    switch(n ){
+    switch(n){
         case 0: //minoが下まで落ちるとLEVEL×10点
             score += level * 10;
             break;
@@ -367,7 +368,7 @@ function delete_check() { //１列揃っていたら消す
                     area[ii][jj] = area[ii - 1][jj];
                 }
             }
-            delieted_lines++;
+            del_lines++;
             action(element, index);
         });
     } 
