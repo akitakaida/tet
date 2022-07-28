@@ -10,6 +10,7 @@ a{
 }
 
 .game-wrapper{
+    padding: 20px;
     background-color: rgb(33, 0, 0);
 }
 .container{
@@ -39,4 +40,12 @@ td{
     position:absolute;
     top:100px;
     left:0;
+}
+.nextMino-wrapper{
+    width:200px;
+    background-color: rgb(33, 0, 0);
+    color:white;
+    position:absolute;
+    top:100px;
+    right:0;
 }

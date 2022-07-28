@@ -26,15 +26,21 @@ const gameArea = [ //ゲームエリアの二次元配列（25ｘ12）
     [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
 ];
 const table = document.getElementById("gameArea");
+const nextTable = document.getElementById("nextMino");
 const minos = [ //4ｘ4でミノの形と数字を規定
+    //空ミノ
+    [[0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0]],
     //Z-ミノ
     [[0, 0, 0, 0],
-     [0, 0, 0, 0],
      [-1, -1.5, 0, 0],
-     [0,  -1,  -1, 0]],
+     [0,  -1,  -1, 0],
+     [0, 0, 0, 0]],
     //J-ミノ
     [[0, 0, 0, 0],
-     [0, 0, -2, 0],
+     [0, 0, -2, 0, 0],
      [0, 0, -2.5, 0],
      [0, -2, -2, 0]],
     //I-ミノ
@@ -44,25 +50,26 @@ const minos = [ //4ｘ4でミノの形と数字を規定
      [0, -3, 0, 0]],
     //T-ミノ
     [[0, 0, 0, 0],
-     [0, 0, 0, 0],
      [-4, -4.5, -4, 0],
-     [0, -4, 0, 0]],
+     [0, -4, 0, 0],
+     [0, 0, 0, 0]],
     //S-ミノ
     [[0, 0, 0, 0],
-     [0, 0, 0, 0],
      [0, -5.5, -5, 0],
-     [-5, -5, 0, 0]],
+     [-5, -5, 0, 0],
+     [0, 0, 0, 0]],
     //O-ミノ
     [[0, 0, 0, 0],
-     [0, 0, 0, 0],
      [0, -6, -6.5, 0],
-     [0, -6, -6, 0]],
+     [0, -6, -6, 0],
+     [0, 0, 0, 0],],
     //L-ミノ
     [[0, 0, 0, 0],
      [0, -7, 0, 0],
      [0, -7.5, 0, 0],
      [0, -7, -7, 0]]
 ]
+const colors = ["black", "red", "blue", "skyblue", "purple", "green", "yellow", "orange", "black"];
 let gameMode = 3;
 let area = gameArea;
 let del_lines = 0;
@@ -70,6 +77,7 @@ let level = 1;
 let score = 0;
 let hiScore = 0;
 let mSec = 1000;
+let nextMinoIndex = 0;
 function modeChange() {//ゲームモードの指定
     switch (gameMode) {
         case 0: //start
@@ -83,10 +91,12 @@ function modeChange() {//ゲームモードの指定
             score = 0;
             mSec = 1000;
             gameMode = 1;
+            nextMinoIndex = getRundom(1, 7);
             changeLevel();
             changeScore(2);
-            modeChange();
             changeColor();
+            nextMino();
+            setTimeout(modeChange, mSec);
             break;
         case 1: //minoを動かす
             createMino()
@@ -157,7 +167,6 @@ function changeColor(){ //areaの数字に応じて色を変化
     if(gameMode != 1){ //gemeModeが1でないとき何もしない
         return;
     }
-    const colors = ["black", "red", "blue", "skyblue", "purple", "green", "yellow", "orange", "black"];
     for (i = 0; i < area.length; i++) {
         for (j = 0; j < area[i].length; j++) {
             table.rows[i].cells[j].style.backgroundColor = colors[Math.floor(Math.abs(area[i][j]))];
@@ -174,7 +183,8 @@ function createMino() { //最上部(非表示)にミノを生成
     if(gameMode != 1){ //gemeModeが1でないとき何もしない
         return;
     }
-    let mino = minos[getRundom(0, 6)];
+    //gameAreaに生成
+    let mino = minos[nextMinoIndex];
     let col = getRundom(1, 8);
     for(i = 0; i < mino.length; i++){
         for(j = 0; j < mino[i].length; j++){
@@ -183,6 +193,16 @@ function createMino() { //最上部(非表示)にミノを生成
     }
     for(i=0; i<4; i++){
         area[i][11]=8;
+    }
+    nextMinoIndex = getRundom(1, 7);
+    nextMino();
+}
+function nextMino(){ //次のMinoを生成
+    let next = minos[nextMinoIndex];
+    for (i = 0; i < next.length; i++) {
+        for (j = 0; j < next[i].length -1 ; j++) {
+            nextTable.rows[i].cells[j].style.backgroundColor = colors[Math.floor(Math.abs(next[i][j]))];
+        }
     }
 }
 //矢印ボタンでの操作 gameMode=1の時のみ有効
