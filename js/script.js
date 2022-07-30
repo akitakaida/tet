@@ -26,7 +26,7 @@ const gameArea = [ //ゲームエリアの二次元配列（25ｘ12）
     [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
 ];
 const table = document.getElementById("gameArea");
-const nextTable = document.getElementById("nextMino");
+const nxt = document.getElementById("nextMino");
 const minos = [ //4ｘ4でミノの形と数字を規定
     //空ミノ
     [[0, 0, 0, 0],
@@ -87,7 +87,7 @@ function modeChange() {//ゲームモードの指定
                 }
             }
             del_lines = 0; //reset
-            level = 1;
+            level = 10;
             score = 0;
             mSec = 1000;
             gameMode = 1;
@@ -119,10 +119,13 @@ function modeChange() {//ゲームモードの指定
             }
             changeScore(0);
             changeLevel();
-            gameMode = 1;
-            modeChange();
+            setTimeout(() => {
+                gameMode = 1;
+                modeChange();
+            }, mSec);
             break;
         default:
+            clearInterval(downInterval);
             break;
     }
 }
@@ -167,9 +170,16 @@ function changeColor(){ //areaの数字に応じて色を変化
     if(gameMode != 1){ //gemeModeが1でないとき何もしない
         return;
     }
-    for (i = 0; i < area.length; i++) {
-        for (j = 0; j < area[i].length; j++) {
-            table.rows[i].cells[j].style.backgroundColor = colors[Math.floor(Math.abs(area[i][j]))];
+    for (let k = 0; k < area.length; k++) {
+        for (let l = 0; l < area[k].length; l++) {
+            try {
+            //LEVEL5以上、CreateMino後にUncaught TypeError: Cannot read properties of undefined (reading 'style')
+            //errorになる条件は不明
+            table.rows[k].cells[l].style.backgroundColor = colors[Math.floor(Math.abs(area[k][l]))];
+            } catch (e) {
+                console.error(e);
+                continue;
+            }
         }
     }
 }
@@ -199,9 +209,16 @@ function createMino() { //最上部(非表示)にミノを生成
 }
 function nextMino(){ //次のMinoを生成
     let next = minos[nextMinoIndex];
-    for (i = 0; i < next.length; i++) {
-        for (j = 0; j < next[i].length -1 ; j++) {
-            nextTable.rows[i].cells[j].style.backgroundColor = colors[Math.floor(Math.abs(next[i][j]))];
+    //LEVEL5以上、CreateMino後にUncaught TypeError: Cannot read properties of undefined (reading 'style')
+    //errorになる条件は不明
+    for (let m = 0; m < next.length; m++) {
+        for (let n = 0; n < next[m].length; n++) {
+            try {
+                nxt.rows[m].cells[n].style.backgroundColor = colors[Math.floor(Math.abs(next[m][n]))];
+            }catch (e) {
+                console.error(e);
+                continue;
+            }
         }
     }
 }
@@ -232,16 +249,16 @@ function down() { //下
         return;
     }
     let count = 0;
-    for(i = area.length - 1; i > 0; i--){
-        for(j = 0; j < area[i].length; j++){
+    for(let i = area.length - 1; i > 0; i--){
+        for(let j = 0; j < area[i].length; j++){
             if(area[i][j] > 0 && area[i-1][j] < 0){
                 count ++ ;
             }
         }
     }
     if(count > 0){ //下に移動できなくなったとき
-        for (i = 0; i < area.length; i++) {
-            for (j = 0; j < area[i].length; j++) {
+        for (let i = 0; i < area.length; i++) {
+            for (let j = 0; j < area[i].length; j++) {
                 area[i][j] = Math.floor(Math.abs(area[i][j]));
             }
         }
@@ -249,8 +266,8 @@ function down() { //下
         clearInterval(downInterval); //自動で落ちるのを止める
         delete_check();
     }else{
-        for(i = area.length - 1; i > 0; i--){
-            for(j = 0; j < area[i].length; j++){
+        for(let i = area.length - 1; i > 0; i--){
+            for(let j = 0; j < area[i].length; j++){
                 if(area[i-1][j] < 0){
                     area[i][j] = area[i-1][j];
                     area[i-1][j] = 0;
@@ -265,16 +282,16 @@ function left() { //左
         return;
     }
     let count = 0;
-    for(i = 0; i < area.length; i++){
-        for(j = 0; j<area[i].length; j++){
+    for(let i = 0; i < area.length; i++){
+        for (let j = 0; j<area[i].length; j++){
             if(area[i][j] > 0 && area[i][j + 1 ] < 0){
                 count ++ ;
             }
         }
     }
     if(count === 0){
-        for(i = 0; i < area.length; i++){
-            for(j = 0; j < area[i].length; j++){
+        for (let i = 0; i < area.length; i++){
+            for (let j = 0; j < area[i].length; j++){
                 if(area[i][j + 1] < 0){
                     area[i][j] = area[i][j+1];
                     area[i][j + 1] = 0;
@@ -289,16 +306,16 @@ function right() { //右
         return;
     }
     let count = 0;
-    for(i = 0; i < area.length; i++){
-        for(j = area[i].length - 1; j > 0; j--){
+    for(let i = 0; i < area.length; i++){
+        for(let j = area[i].length - 1; j > 0; j--){
             if(area[i][j] > 0 && area[i][j - 1] < 0){
                 count ++ ;
             }
         }
     }
     if(count === 0){
-        for(i = 0; i < area.length; i++){
-            for(j = area[i].length - 1; j > 0; j--){
+        for (let i = 0; i < area.length; i++){
+            for (let j = area[i].length - 1; j > 0; j--){
                 if(area[i][j - 1] < 0){
                     area[i][j] = area[i][j - 1];
                     area[i][j - 1] = 0;
