@@ -87,7 +87,7 @@ function modeChange() {//ゲームモードの指定
                 }
             }
             del_lines = 0; //reset
-            level = 10;
+            level = 1;
             score = 0;
             mSec = 1000;
             gameMode = 1;
