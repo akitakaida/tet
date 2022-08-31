@@ -9,10 +9,14 @@
 </head>
 
 <body>
+    <div class="start-wrapper">
+        <div class="container">
+            <input type="button" class="btn" id="start" value="Start" onclick="start()">    
+        </div>
+    </div>
     <div class="game-wrapper">
         <div class="container">
             <table id="gameArea">
-                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
                 <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
                 <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
                 <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
@@ -38,12 +42,20 @@
                 <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
                 <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
             </table>
+        </div>        
+    </div>
+    <div class="btn-wrapper">
+        <div class="container">
+            <input type="button" class="btn" value="↑：回転" onclick="spin()">
+        </div>
+        <div class="container">
             <input type="button" class="btn" value="←" onclick="left()">
             <input type="button" class="btn" value="↓" onclick="down()">
             <input type="button" class="btn" value="→" onclick="right()">
-            <input type="button" class="btn" value="↑：回転" onclick="spin()">
-            <input type="button" class="btn" value="Start" onclick="start()">
-        </div>        
+        </div>
+        <div class="container">
+            <input type="button" class="btn" id="space" value="SPACE:下まで落とす" onclick="fall()">
+        </div>
     </div>
     <div class="nextMino-wrapper">
         <div class="container">

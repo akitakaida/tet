@@ -9,7 +9,7 @@ a{
     
 }
 
-.game-wrapper{
+body{
     height:100%;
     background-color: rgb(33, 0, 0);
 }
@@ -17,6 +17,14 @@ a{
     width:80%;
     margin:0 auto;
 }
+
+.start-wrapper{
+    width: 100%;
+    text-align: center;
+    position:absolute;
+    bottom: 0;
+}
+
 table{
     background-color: rgb(55, 55, 55);
     margin:0 auto;
@@ -28,11 +36,23 @@ td{
     width: 30px;
 }
 
+.btn-wrapper{
+    width:220px;
+    text-align: center;
+    position:absolute;
+    bottom:100px;
+    right:0;
+}
 .btn{
     height: 30px;
     width:50px;
-    color:ore
 }
+#space{
+    margin: 10px 0;
+    width: 90%;
+}
+
+
 
 .score-wrapper{
     width:200px;
