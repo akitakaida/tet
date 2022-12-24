@@ -5,43 +5,47 @@
     <meta charset="utf-8">
     <meta name=”viewport” content=”width=device-width,initial-scale=1″>
     <title>GAME</title>
-    <link rel="stylesheet"  href="css/style.css">
+    <link rel="stylesheet"  href="style.css">
 </head>
 
 <body>
-    <div class="start-wrapper">
+    <div class="start-wrapper" id="start-wrap">
         <div class="container">
-            <input type="button" class="btn" id="start" value="Start" onclick="start()">    
+            <input type="button" class="btn" id="start" value="Start" onclick="start()"> 
+            <div id="showscore">
+            </div>   
         </div>
     </div>
     <div class="game-wrapper">
         <div class="container">
             <table id="gameArea">
-                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-                <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
-            </table>
+                <tbody>
+                    <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>
+                    <tr hidden><td hidden></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td hidden></td></tr>    
+                </tbody>
+                </table>
         </div>        
     </div>
     <div class="btn-wrapper">
@@ -76,7 +80,7 @@
         </div>
     </div>
     
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
