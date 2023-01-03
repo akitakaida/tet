@@ -37,7 +37,7 @@ const minos = [ //4ｘ4でミノの形と数字を規定
      [0,  -1,  -1, 0]],
     //J-ミノ
     [[0, 0, 0, 0],
-     [0, 0, -2, 0, 0],
+     [0, 0, -2, 0],
      [0, 0, -2.5, 0],
      [0, -2, -2, 0]],
     //T-ミノ
@@ -66,92 +66,133 @@ const minos = [ //4ｘ4でミノの形と数字を規定
      [0, -7, -7.5, 0],
      [0, -7, -7, 0]],
 ]
-const colors = ["black", "red", "blue", "purple", "skyblue", "green", "orange", "yellow", "black"];
-let gameMode = 3, del_lines, level, score, nextMinoIndex, mSec, hiScore = 0;
-function modeChange() {//ゲームモードの指定
-    switch (gameMode) {
-        case 0: //start
-            gameMode = 1;
-            //***********************reset***********************//
-            for (let i = 0; i < area.length - 1; i++) {
-                for (let j = 1; j < area[i].length - 1; j++) {
-                    area[i][j] = 0;
-                }
-            }
-            del_lines = 0; 
-            level = 1;
-            score = 0;
-            mSec = 1000;
-            nextMinoIndex = getRundom(1, 7);
-            changeLevel();
-            changeScore(2);
-            changeColor();
-            //***********************resetここまで***********************//
-            nextMino(nextMinoIndex);
-            setTimeout(modeChange, mSec);
-            break;
-        case 1: //minoを動かす
-            createMino();
-            changeColor();
-            downInterval = setInterval(down, mSec);
-            setTimeout(() => {
-                nextMino(nextMinoIndex);
-            }, mSec);
-            break;
-        case 2: //GAMEOVERの判定
-            for (let i = 1; i < area[3].length - 1; i++) {
-                if (area[3][i] != 0) {
-                    //GAMEOVERの処理
-                    let gameover = document.getElementById("start-wrap");
-                    gameover.style.display = "inline";
-                    let showscore =document.getElementById("showscore");
-                    if(score > hiScore){
-                        hiScore = score;
-                    }
-                    showscore.innerHTML=`<p>GAME OVER<br>LEVEL: ${level}<br>SCORE: ${score}<br>Hi SCORE: ${hiScore}</p>`
-                    gameMode = 3;
-                    return;
-                }
-            }
-            changeScore(0);
-            changeLevel();
-            gameMode = 1;
-            setTimeout(modeChange, mSec);
-            break;
-        default:
-            break;
-    }
-}
-function start() { //gameStart
-    if (gameMode != 3) { //gemeModeが3でないとき何もしない
-        return;
-    }
-    let hiscoreTXT = document.getElementById("hi_score");
-    hiscoreTXT.innerHTML = `Hi SCORE ${hiScore}`;
+const colors = ["black", "red", "blue", "purple", "skyblue", "green", "orange", "yellow", "white"];
+const table = document.getElementById("gameArea");
+const nxt = document.getElementById("nextMino");
+
+let gameMode = 4, del_lines, level, score, nextMinoIndex, mSec, hiScore = 0;
+
+//Startが押されたとき、Wrapperを隠し、ゲームを始める
+function start() {
     let gameover = document.getElementById("start-wrap");
     gameover.style.display = "none";
     gameMode = 0
-    modeChange();
+    main(0);
 }
-function changeLevel(){ //LEVELを変えて書き換え
-    if(del_lines > (level - 2) * level + 4){ //5, 8, 13, 20 ...でレベルアップ
+
+//メインループ
+function main(time){
+    switch (gameMode){
+        case 0:
+            //Mode0: Game Start
+            resetGame();
+            changeColor();
+            writeScore();
+            gameMode = 3;
+            break;
+        case 1:
+            //Mode1: Mino Move
+            //mSecごとにdown()
+            if(time >= mSec){
+                down();
+                time = 0;
+            } 
+            changeColor();
+            break;
+        case 2:
+            //Mode2: Delete Check
+            gameMode = 9;
+            changeColor();
+            setTimeout(delete_check, 400);
+            break;
+        case 3:
+            //Mode3: Next Mino
+            changeScore(0);
+            changeLevel();
+            writeScore();
+            createMino();
+            nextMino();
+            time = 0;
+            gameMode = 1
+            break;
+        case 4:
+            //Mode4: Game Over
+            changeColor();
+            let gameover = document.getElementById("start-wrap");
+            gameover.style.display = "inline";
+            let showscore = document.getElementById("showscore");
+            if (score > hiScore) {
+                hiScore = score;
+            }
+            showscore.innerHTML = `<p>GAME OVER<br>LEVEL: ${level}<br>SCORE: ${score}<br>Hi SCORE: ${hiScore}</p>`
+            return;
+        case 9: 
+            //Mode9: Pause
+            break;
+
+    }
+    time+=25;
+    setTimeout(() => {
+        main(time);
+    }, 25);
+}
+
+//pause mode
+function pause(){
+    let pauseArea = document.getElementById("pause-wrap");
+    gameMode = 9;
+    pauseArea.style.display = "inline";
+}
+
+//Pause解除
+function lift_pause(){
+    let pauseArea = document.getElementById("pause-wrap");
+    pauseArea.style.display = "none";
+    gameMode = 1;
+}
+//GameOverの判定
+function Mode_check(){
+    for (let i = 1; i < area[3].length - 1; i++) {
+        if (area[3][i] != 0) {
+            //Game Over
+            return 4;
+        }
+    }
+    //Delete Checkへ
+    return 2;
+}
+
+//Gameの状態のリセット
+function resetGame(){
+    //Area 中身のリセット
+    for (let i = 0; i < area.length - 1; i++) {
+        for (let j = 1; j < area[i].length - 1; j++) {
+            area[i][j] = 0;
+        }
+    }
+    del_lines = 0;
+    level = 1;
+    score = -10;
+    mSec = 1000;
+    nextMinoIndex = getRundom(1, minos.length - 1);
+}
+
+//LEVELを変える計算
+function changeLevel(){ 
+    //del_lines = 2, 4, 7, ...（階差数列が2, 3, 4, ...）でレベルアップ
+    while( del_lines >= ((level + 1) * level / 2) + 1){
         level++;
-        changeLevel();
-    }else if (del_lines > 1 && del_lines < 5) { //2列消すとLEVEL2
-        level = 2;
-        changeLevel;
     }
-    let levelTXT = document.getElementById("level");
-    levelTXT.innerHTML = `LEVEL ${level}`; //HTML書き換え
-    if(level < 10){ //インターバル変化
+    //インターバル変化 Level10まで
+    if(level <= 10){ 
         mSec = (11 - level) * 100;
-    }else{
-        mSec = 1000 / level;
     }
 }
-function changeScore(n) { //scoreを変えて書き換え
+ //scoreを変える
+function changeScore(n) {
     switch(n){
-        case 0: //minoが下まで落ちるとLEVEL×10点
+        case 0:
+            //minoが下まで落ちるとLEVEL×10点
             score += level * 10;
             break;
         case 1: //列を消すとLEVEL×100点
@@ -160,14 +201,21 @@ function changeScore(n) { //scoreを変えて書き換え
         default:
             break;
     }
-    let scoreTXT = document.getElementById("score");
-    scoreTXT.innerHTML = `SCORE ${score}`;
+    
 }
-function changeColor(){ //areaの数字に応じて色を変化
-    if(gameMode != 1){ //gemeModeが1でないとき何もしない
-        return;
-    }
-    const table = document.getElementById("gameArea");
+
+//スコアなどの書き換え
+function writeScore(){
+    let levelTXT = document.getElementById("level");
+    levelTXT.innerHTML = `LEVEL ${level}`;
+    let scoreTXT = document.getElementById("score");
+    scoreTXT.innerHTML = `SCORE ${score}`; 
+    let hiscoreTXT = document.getElementById("hi_score");
+    hiscoreTXT.innerHTML = `Hi SCORE ${hiScore}`;
+}
+
+ //areaの数字に応じて色を変化
+function changeColor(){
     for (let i = 0; i < area.length; i++) {
         for (let j = 0; j < area[i].length; j++) {
             try {
@@ -183,56 +231,64 @@ function changeColor(){ //areaの数字に応じて色を変化
         }
     }
 }
-function getRundom(n, m) { //ｎ以上ｍ以下の乱数を生成
+
+//ｎ以上ｍ以下の乱数を生成
+function getRundom(n, m) {
     for (let i = 0 ; i < 5 ; i++){
         let num = Math.floor(Math.random() * (m + 1 - n)) + n;
         return num;
     }
 };
-function createMino() { //最上部(非表示)にミノを生成
-    if(gameMode != 1){ //gemeModeが1でないとき何もしない
-        return;
-    }
+
+//最上部(非表示)にミノを生成
+function createMino() { 
     //gameAreaに生成
     let mino = minos[nextMinoIndex];
     let col = getRundom(1, 8);
-    for(i = 0; i < mino.length; i++){
+    for(let i = 0; i < mino.length; i++){
         for(j = 0; j < mino[i].length; j++){
             area[i][j + col] = mino[i][j];
         }
     }
-    for(i=0; i<3; i++){
+    for(i=0; i < 4; i++){
         area[i][11]=8;
     }
-    nextMino(0);
-    nextMinoIndex = getRundom(1, 7);
+    nextMinoIndex = getRundom(1, minos.length - 1);
 }
-function nextMino(index){ //次のMinoを生成
-    let next = minos[index];
-    let adjust = 0;
-    const nxt = document.getElementById("nextMino");
-    if( index % 2 === 1){ //Z、T、S、Oミノのとき
-        adjust = 1;
-    }
+
+//次のMinoを表示
+function nextMino(){ 
+    let next = minos[nextMinoIndex];
     //LEVEL5以上、CreateMino後にUncaught TypeError: Cannot read properties of undefined (reading 'style')
     //errorになる条件は不明
-    for (let m = 0; m < next.length - adjust; m++) {
+    for (let m = 0; m < next.length; m++) {
         for (let n = 0; n < next[m].length; n++) {
             try {
-                nxt.rows[m].cells[n].style.backgroundColor = colors[Math.floor(Math.abs(next[m + adjust][n]))];
+                nxt.rows[m].cells[n].style.backgroundColor = colors[Math.floor(Math.abs(next[m][n]))];
             }catch (e) {
                 console.error(e);
                 console.log(m);
                 console.log(n);
                 continue;
             }
+        }   
+    }
+    //Z, T, S, O ミノのとき
+    if (nextMinoIndex % 2 != 0){
+        for(m = 0; m < next.length - 1; m++){
+            for(n = 0; n < next[m].length; n++){
+                nxt.rows[m].cells[n].style.backgroundColor = nxt.rows[m + 1].cells[n].style.backgroundColor;
+                if (m === next.length - 2) nxt.rows[m + 1].cells[n].style.backgroundColor = colors[0];
+            }
         }
     }
 }
+
 //矢印ボタンでの操作 gameMode=1の時のみ有効
 document.addEventListener('keydown', keydown_ivent);
 function keydown_ivent(e) {
-    if (gameMode != 1) { //gemeModeが1でないとき何もしない
+    if (gameMode != 1) { 
+        //gemeModeが1でないとき何もしない
         return;
     }
     switch (e.key) {
@@ -251,13 +307,18 @@ function keydown_ivent(e) {
         case ' ':
             fall();
             break;
-        default : //for debug
+        case 'p':
+            pause();
             break;
+        default:
+            break;  
+        }  
     }
-}
-//移動と回転
-function down() { //下
-    if(gameMode != 1){ //gemeModeが1でないとき何もしない
+
+//下移動
+function down() {
+    if(gameMode != 1){ 
+        //gemeModeが1でないとき何もしない
         return;
     }
     let count = 0;
@@ -268,28 +329,35 @@ function down() { //下
             }
         }
     }
-    if(count > 0){ //下に移動できなくなったとき
-        for (let i = 0; i < area.length; i++) {
+    if(count > 0){ 
+        //下に移動できなくなったとき
+        count = 0;
+        loop1: for (let i = 0; i < area.length; i++) {
             for (let j = 0; j < area[i].length; j++) {
-                area[i][j] = Math.floor(Math.abs(area[i][j]));
+                if(area[i][j] < 0){
+                    area[i][j] = Math.floor(Math.abs(area[i][j]));
+                    count++;
+                }
+                if(count === 4) break loop1;
             }
         }
-        clearInterval(downInterval);
-        gameMode = 2;
-        delete_check();
-    }else{ //下に移動できるとき
-        for(let i = area.length - 1; i > 0; i--){
+        gameMode = Mode_check();
+    }else{ 
+        //下に移動できるとき
+        loop2: for(let i = area.length - 1; i > 0; i--){
             for(let j = 0; j < area[i].length; j++){
                 if(area[i-1][j] < 0){
                     area[i][j] = area[i-1][j];
                     area[i-1][j] = 0;
                 }
+                if(count === 4) break loop2;
             }
         }
     }   
-    changeColor();
 }
-function fall(){ //一番下まで落ちる
+
+//一番下まで落ちる
+function fall(){ 
     if(gameMode != 1){
         return;
     }
@@ -300,7 +368,7 @@ function fall(){ //一番下まで落ちる
         for(let j = 0; j <area[i].length; j++){
             if(area[i][j] < 0){
                 minoCells.push([i,j]);
-                color = area[i][j];
+                color = Math.floor(Math.abs(area[i][j]));
                 area[i][j] = 0;
             }
             if(minoCells.length === 4){
@@ -321,10 +389,13 @@ function fall(){ //一番下まで落ちる
             break loop2;
         }
     }
-    down();
+    gameMode = Mode_check();
 }
-function left() { //左
-    if(gameMode != 1){ //gemeModeが1でないとき何もしない
+
+//左移動
+function left() { 
+    if(gameMode != 1){ 
+        //gemeModeが1でないとき何もしない
         return;
     }
     let count = 0;
@@ -336,19 +407,23 @@ function left() { //左
         }
     }
     if(count === 0){
-        for (let i = 0; i < area.length; i++){
+        loop:for (let i = 0; i < area.length; i++){
             for (let j = 0; j < area[i].length; j++){
                 if(area[i][j + 1] < 0){
                     area[i][j] = area[i][j+1];
                     area[i][j + 1] = 0;
+                    count++;
                 }
+                if(count === 4) break loop;
             }
         }
     }
-    changeColor();
 }
-function right() { //右
-    if(gameMode != 1){ //gemeModeが1でないとき何もしない
+
+//右移動
+function right() { 
+    if(gameMode != 1){ 
+        //gemeModeが1でないとき何もしない
         return;
     }
     let count = 0;
@@ -360,19 +435,23 @@ function right() { //右
         }
     }
     if(count === 0){
-        for (let i = 0; i < area.length; i++){
+        loop: for (let i = 0; i < area.length; i++){
             for (let j = area[i].length - 1; j > 0; j--){
                 if(area[i][j - 1] < 0){
                     area[i][j] = area[i][j - 1];
                     area[i][j - 1] = 0;
+                    count++;
                 }
+                if (count === 4) break loop;
             }
         }
     }
-    changeColor();
 }
-function spin() { //回転
-    if(gameMode != 1){ //gemeModeが1でないとき何もしない
+
+//回転
+function spin() {
+    if(gameMode != 1){ 
+        //gemeModeが1でないとき何もしない
         return;
     }
     //基準となる位置と色を取得
@@ -432,12 +511,10 @@ function spin() { //回転
             area[element[0]][element[1]] = color;
         });
     }
-    changeColor();
 }
-function delete_check() { //１列揃っていたら消す
-    if(gameMode != 2){ //gemeModeが2でないとき何もしない
-        return;
-    }
+
+//１列揃っていたら消す
+function delete_check() { 
     let Is = [];
     for(let I = 3; I < area.length - 1; I++) {
         let count = 0;
@@ -450,9 +527,7 @@ function delete_check() { //１列揃っていたら消す
             Is.push(I);
         }
     }
-    if(Is.length === 0){
-        modeChange();
-    }else{
+    if(Is.length != 0){
         Is.forEach((element, index) => {
             for (let ii = element; ii > 0; ii--) {
                 for(let jj = 0; jj < area[ii].length; jj++){
@@ -462,13 +537,13 @@ function delete_check() { //１列揃っていたら消す
             del_lines++;
             action(element, index);
         });
-    } 
-}
-function action(i, index) { //消えるときのアニメーション
-    if(gameMode != 2){ //gemeModeが2でないとき何もしない
-        return;
+    }else{
+        gameMode = 3;
     }
-    const table = document.getElementById("gameArea");
+}
+
+//消えるときのアニメーション
+function action(i, index) { 
     let count = 0;
     const funcA = () => {
         for(j = 0; j < area[i].length; j++){
@@ -486,7 +561,8 @@ function action(i, index) { //消えるときのアニメーション
         }else {
             changeScore(1);
             if (index === 0) {
-                modeChange();
+                //Pause 解除
+                gameMode = 3;
             }
         }
     }
